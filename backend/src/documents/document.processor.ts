@@ -11,6 +11,14 @@ function randomSleepMs(): number {
   return 5000 + Math.floor(Math.random() * 5001);
 }
 
+function formatProcessedTimestamp(date: Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'full',
+    timeStyle: 'long',
+    timeZone: 'UTC',
+  }).format(date);
+}
+
 @Processor(DOCUMENT_QUEUE)
 export class DocumentProcessor extends WorkerHost {
   constructor(
@@ -66,12 +74,16 @@ export class DocumentProcessor extends WorkerHost {
     }
 
     const displayName = user.displayName.trim();
-    const processedAt = new Date().toISOString();
+    const processedAt = formatProcessedTimestamp(new Date());
     const result = `Analysis of '${doc.title}' — processed for ${displayName} on ${processedAt}`;
 
-    await this.documentsService.applyTransition(documentId, DocumentStatus.DONE, {
-      result,
-      processorDisplayName: displayName,
-    });
+    await this.documentsService.applyTransition(
+      documentId,
+      DocumentStatus.DONE,
+      {
+        result,
+        processorDisplayName: displayName,
+      },
+    );
   }
 }

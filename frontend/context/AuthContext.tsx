@@ -38,14 +38,22 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+const subscribeNoop = () => () => {};
+const snapshotClientReady = () => true;
+const snapshotServerNotReady = () => false;
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const hydrated = useSyncExternalStore(
+    subscribeNoop,
+    snapshotClientReady,
+    snapshotServerNotReady,
+  );
+
   const auth = useSyncExternalStore(
     subscribeAuth,
     getAuthSnapshot,
     getServerAuthSnapshot,
   );
-
-  const hydrated = typeof window !== "undefined";
 
   const login = useCallback(async (email: string, password: string) => {
     const data = await apiFetch<{
@@ -111,9 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [auth, hydrated, login, register, logout, setUser],
   );
 
-  return (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth(): AuthContextValue {

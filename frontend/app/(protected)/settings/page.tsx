@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { AuthGate } from "@/components/AuthGate";
 import { apiFetch, ApiRequestError } from "@/lib/api";
 
-function SettingsContent() {
+export default function SettingsPage() {
   const { token, user, setUser } = useAuth();
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -90,13 +89,5 @@ function SettingsContent() {
         </button>
       </form>
     </div>
-  );
-}
-
-export default function SettingsPage() {
-  return (
-    <AuthGate>
-      <SettingsContent />
-    </AuthGate>
   );
 }

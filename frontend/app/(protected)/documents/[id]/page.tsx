@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { AuthGate } from "@/components/AuthGate";
 import { useDocument } from "@/hooks/useDocument";
 import { useDocumentSocket } from "@/hooks/useDocumentSocket";
 import type { DocumentStatus } from "@/lib/types";
@@ -24,7 +23,7 @@ function statusBadge(status: DocumentStatus) {
   );
 }
 
-function DocumentDetailContent() {
+export default function DocumentDetailPage() {
   const params = useParams();
   const id = typeof params.id === "string" ? params.id : undefined;
   const { token } = useAuth();
@@ -108,13 +107,5 @@ function DocumentDetailContent() {
         )}
       </section>
     </div>
-  );
-}
-
-export default function DocumentDetailPage() {
-  return (
-    <AuthGate>
-      <DocumentDetailContent />
-    </AuthGate>
   );
 }

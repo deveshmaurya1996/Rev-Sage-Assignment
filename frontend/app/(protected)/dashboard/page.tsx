@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { AuthGate } from "@/components/AuthGate";
 import { apiFetch, ApiRequestError } from "@/lib/api";
 import { useDocuments } from "@/hooks/useDocuments";
 import type { DocumentRecord, DocumentStatus, DocumentType } from "@/lib/types";
@@ -39,7 +38,7 @@ function statusBadge(status: DocumentStatus) {
   );
 }
 
-function DashboardContent() {
+export default function DashboardPage() {
   const { token } = useAuth();
   const [status, setStatus] = useState<DocumentStatus | "">("");
   const [type, setType] = useState<DocumentType | "">("");
@@ -242,13 +241,5 @@ function DashboardContent() {
         )}
       </section>
     </div>
-  );
-}
-
-export default function DashboardPage() {
-  return (
-    <AuthGate>
-      <DashboardContent />
-    </AuthGate>
   );
 }
