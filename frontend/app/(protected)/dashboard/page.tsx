@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { DocumentStatusBadge } from "@/components/DocumentStatusBadge";
+import { SelectWithChevron } from "@/components/SelectWithChevron";
 import { useAuth } from "@/hooks/useAuth";
 import { apiFetch, ApiRequestError } from "@/lib/api";
 import { useDocuments } from "@/hooks/useDocuments";
@@ -21,22 +23,6 @@ const TYPE_OPTIONS: { value: DocumentType | ""; label: string }[] = [
   { value: "report", label: "Report" },
   { value: "contract", label: "Contract" },
 ];
-
-function statusBadge(status: DocumentStatus) {
-  const map: Record<DocumentStatus, string> = {
-    QUEUED: "bg-amber-500/20 text-amber-300",
-    PROCESSING: "bg-sky-500/20 text-sky-300",
-    DONE: "bg-emerald-500/20 text-emerald-300",
-    FAILED: "bg-rose-500/20 text-rose-300",
-  };
-  return (
-    <span
-      className={`inline-flex rounded px-2 py-0.5 text-xs font-medium ${map[status]}`}
-    >
-      {status}
-    </span>
-  );
-}
 
 export default function DashboardPage() {
   const { token } = useAuth();
@@ -104,15 +90,15 @@ export default function DashboardPage() {
           </label>
           <label className="flex flex-col gap-1 text-sm">
             <span className="text-slate-400">Type</span>
-            <select
-              className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 outline-none focus:border-teal-500"
+            <SelectWithChevron
+              className="min-w-40 py-2 pl-3 pr-10 text-sm"
               value={docType}
               onChange={(e) => setDocType(e.target.value as DocumentType)}
             >
               <option value="invoice">invoice</option>
               <option value="report">report</option>
               <option value="contract">contract</option>
-            </select>
+            </SelectWithChevron>
           </label>
           <div className="md:col-span-2" />
           <label className="flex flex-col gap-1 text-sm md:col-span-2">
@@ -125,9 +111,7 @@ export default function DashboardPage() {
             />
           </label>
           {submitError ? (
-            <p className="text-sm text-rose-400 md:col-span-2">
-              {submitError}
-            </p>
+            <p className="text-sm text-rose-400 md:col-span-2">{submitError}</p>
           ) : null}
           <button
             type="submit"
@@ -143,10 +127,10 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <h2 className="text-lg font-medium text-white">Your documents</h2>
           <div className="flex flex-wrap gap-3">
-            <label className="flex flex-col gap-1 text-xs text-slate-400">
+            <label className="flex min-w-38 flex-col gap-1 text-xs text-slate-400">
               Status
-              <select
-                className="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-slate-200"
+              <SelectWithChevron
+                className="py-1.5 pl-2 pr-9 text-sm"
                 value={status}
                 onChange={(e) =>
                   setStatus(e.target.value as DocumentStatus | "")
@@ -157,23 +141,21 @@ export default function DashboardPage() {
                     {o.label}
                   </option>
                 ))}
-              </select>
+              </SelectWithChevron>
             </label>
-            <label className="flex flex-col gap-1 text-xs text-slate-400">
+            <label className="flex min-w-38 flex-col gap-1 text-xs text-slate-400">
               Type
-              <select
-                className="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-slate-200"
+              <SelectWithChevron
+                className="py-1.5 pl-2 pr-9 text-sm"
                 value={type}
-                onChange={(e) =>
-                  setType(e.target.value as DocumentType | "")
-                }
+                onChange={(e) => setType(e.target.value as DocumentType | "")}
               >
                 {TYPE_OPTIONS.map((o) => (
                   <option key={o.label} value={o.value}>
                     {o.label}
                   </option>
                 ))}
-              </select>
+              </SelectWithChevron>
             </label>
             <label className="flex flex-col gap-1 text-xs text-slate-400">
               Search title
@@ -229,7 +211,9 @@ export default function DashboardPage() {
                       </Link>
                     </td>
                     <td className="py-3 pr-4 text-slate-300">{d.type}</td>
-                    <td className="py-3 pr-4">{statusBadge(d.status)}</td>
+                    <td className="py-3 pr-4">
+                      <DocumentStatusBadge status={d.status} />
+                    </td>
                     <td className="py-3 text-slate-500">
                       {new Date(d.updatedAt).toLocaleString()}
                     </td>

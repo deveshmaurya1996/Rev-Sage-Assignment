@@ -5,23 +5,7 @@ import { useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useDocument } from "@/hooks/useDocument";
 import { useDocumentSocket } from "@/hooks/useDocumentSocket";
-import type { DocumentStatus } from "@/lib/types";
-
-function statusBadge(status: DocumentStatus) {
-  const map: Record<DocumentStatus, string> = {
-    QUEUED: "bg-amber-500/20 text-amber-300",
-    PROCESSING: "bg-sky-500/20 text-sky-300",
-    DONE: "bg-emerald-500/20 text-emerald-300",
-    FAILED: "bg-rose-500/20 text-rose-300",
-  };
-  return (
-    <span
-      className={`inline-flex rounded px-2 py-0.5 text-xs font-medium ${map[status]}`}
-    >
-      {status}
-    </span>
-  );
-}
+import { DocumentStatusBadge } from "@/components/DocumentStatusBadge";
 
 export default function DocumentDetailPage() {
   const params = useParams();
@@ -61,7 +45,7 @@ export default function DocumentDetailPage() {
         <h1 className="mt-4 text-2xl font-semibold text-white">{doc.title}</h1>
         <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-slate-400">
           <span>Type: {doc.type}</span>
-          <span>{statusBadge(doc.status)}</span>
+          <DocumentStatusBadge status={doc.status} />
           {live ? (
             <span className="text-slate-500">Live updates on</span>
           ) : null}

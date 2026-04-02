@@ -47,7 +47,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-md">
+    <div className="mx-auto w-full max-w-md">
       <h1 className="text-2xl font-semibold text-white">Profile</h1>
       <p className="mt-1 text-sm text-slate-400">
         Changing your display name does not affect names stored on completed

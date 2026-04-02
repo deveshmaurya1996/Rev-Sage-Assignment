@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import type { JwtPayloadUser } from '../common/decorators/current-user.decorator';
@@ -12,10 +20,7 @@ export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
   @Post()
-  create(
-    @CurrentUser() user: JwtPayloadUser,
-    @Body() dto: CreateDocumentDto,
-  ) {
+  create(@CurrentUser() user: JwtPayloadUser, @Body() dto: CreateDocumentDto) {
     return this.documentsService.create(user.sub, dto);
   }
 

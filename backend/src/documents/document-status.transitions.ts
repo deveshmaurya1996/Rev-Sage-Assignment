@@ -2,10 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { DocumentStatus } from '../entities/document-status.enum';
 
 const ALLOWED: Record<DocumentStatus, DocumentStatus[]> = {
-  [DocumentStatus.QUEUED]: [
-    DocumentStatus.PROCESSING,
-    DocumentStatus.FAILED,
-  ],
+  [DocumentStatus.QUEUED]: [DocumentStatus.PROCESSING, DocumentStatus.FAILED],
   [DocumentStatus.PROCESSING]: [DocumentStatus.DONE, DocumentStatus.FAILED],
   [DocumentStatus.DONE]: [],
   [DocumentStatus.FAILED]: [],

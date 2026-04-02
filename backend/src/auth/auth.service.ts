@@ -38,7 +38,11 @@ export class AuthService {
     const token = await this.signToken(saved.id, saved.email);
     return {
       accessToken: token,
-      user: { id: saved.id, email: saved.email, displayName: saved.displayName },
+      user: {
+        id: saved.id,
+        email: saved.email,
+        displayName: saved.displayName,
+      },
     };
   }
 
@@ -57,7 +61,11 @@ export class AuthService {
     const token = await this.signToken(user.id, user.email);
     return {
       accessToken: token,
-      user: { id: user.id, email: user.email, displayName: user.displayName },
+      user: {
+        id: user.id,
+        email: user.email,
+        displayName: user.displayName,
+      },
     };
   }
 
